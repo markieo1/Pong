@@ -5,6 +5,7 @@
 #include "Ball.h"
 #include "ScoreHandler.h"
 #include "GameStateFactory.h"
+#include <TGUI\TGUI.hpp>
 
 /// <summary>
 /// A class that handles everything in the game.
@@ -123,6 +124,8 @@ private:
 	/// The text to draw.
 	/// </summary>
 	sf::Text text;
+
+	tgui::Gui* gui;
 };
 
 #endif

@@ -25,28 +25,29 @@ void Game::Update(float deltaTime)
 		{
 			break;
 		}
-		case GameStates::PAUSED:
+
+		case GameStates::NEWGAME:
 		{
-			if (ball.velocity == sf::Vector2f(0.f, 0.f))
-			{
-				text.setString(sf::String("Press enter to launch the ball."));
-			}
-			else
-			{
-				text.setString(sf::String("Press enter to continue!"));
-			}
+			ScoreHandler::player1Score = 0;
+			ScoreHandler::player2Score = 0;
+			ball.position = sf::Vector2f(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f);
+			ball.circle.setPosition(ball.position);
+			ball.velocity = sf::Vector2f(0.f, 0.f);
+			text.setString(sf::String("Press enter to launch the ball."));
 			text.setPosition(SCREEN_WIDTH / 2.f - text.getGlobalBounds().width / 2, 30.f);
 			break;
 		}
+
+		case GameStates::PAUSED:
+		{
+			text.setString(sf::String("Press enter to continue!"));
+			text.setPosition(SCREEN_WIDTH / 2.f - text.getGlobalBounds().width / 2, 30.f);
+			break;
+		}
+
 		case GameStates::INGAME:
 		default:
 		{
-			if (ball.velocity == sf::Vector2f(0.f, 0.f))
-			{
-				text.setString(sf::String("Press enter to launch the ball."));
-				text.setPosition(SCREEN_WIDTH / 2.f - text.getGlobalBounds().width / 2, 30.f);
-				break;
-			}
 			int lastPlayer1Score = ScoreHandler::player1Score;
 			int lastPlayer2Score = ScoreHandler::player2Score;
 			player1.Update(deltaTime);
@@ -77,9 +78,11 @@ void Game::Draw()
 	{
 		case GameStates::MAINMENU:
 		{
+			gui->draw();
 			break;
 		}
 
+		case GameStates::NEWGAME:
 		case GameStates::PAUSED:
 		case GameStates::INGAME:
 		default:
@@ -100,6 +103,7 @@ void Game::HandleInput()
 	sf::Event event;
 	while (drawer.GameWindow->pollEvent(event))
 	{
+		gui->handleEvent(event);
 		if (event.type == sf::Event::Closed)
 		{
 			drawer.GameWindow->close();
@@ -112,6 +116,30 @@ void Game::HandleInput()
 		{
 			case GameStates::MAINMENU:
 			{
+				tgui::Callback callback;
+				while (gui->pollCallback(callback))
+				{
+					if (callback.id == 1)
+					{
+						GameStateHandler.SetState(GameStates::NEWGAME);
+					}
+				}
+				break;
+			}
+
+			case GameStates::NEWGAME:
+			{
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+				{
+					GameStateHandler.SetState(GameStates::INGAME);
+
+					if (ball.velocity == sf::Vector2f(0.f, 0.f))
+					{
+						ball.position = sf::Vector2f(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f);
+						ball.circle.setPosition(ball.position);
+						ball.velocity = sf::Vector2f(BallMoveSpeed, BallMoveSpeed); // Make it possible random direction, at the moment always to the right
+					}
+				}
 				break;
 			}
 
@@ -131,11 +159,7 @@ void Game::HandleInput()
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 				{
-					ScoreHandler::player1Score = 0;
-					ScoreHandler::player2Score = 0;
-					ball.position = sf::Vector2f(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f);
-					ball.circle.setPosition(ball.position);
-					ball.velocity = sf::Vector2f(0.f, 0.f);
+					GameStateHandler.SetState(GameStates::NEWGAME);
 				}
 				break;
 			}
@@ -150,20 +174,7 @@ void Game::HandleInput()
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 				{
-					ScoreHandler::player1Score = 0;
-					ScoreHandler::player2Score = 0;
-					ball.position = sf::Vector2f(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f);
-					ball.circle.setPosition(ball.position);
-					ball.velocity = sf::Vector2f(0.f, 0.f);
-					GameStateHandler.SetState(GameStates::PAUSED);
-				}
-
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-				{
-					if (ball.velocity == sf::Vector2f(0.f, 0.f))
-					{
-						ball.velocity = sf::Vector2f(BallMoveSpeed, BallMoveSpeed);
-					}
+					GameStateHandler.SetState(GameStates::NEWGAME);
 				}
 
 				player1.HandleInput();
@@ -181,8 +192,19 @@ void Game::Initialize()
 	drawer = PongEngine::Drawer();
 	drawer.Init(WINDOW_TITLE, 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, sf::Style::Close);
 
+	gui = new tgui::Gui(*drawer.GameWindow);
+
 	font.loadFromFile("./Debug/arial.ttf");
 	text.setFont(font);
+	gui->setGlobalFont(font);
+
+	tgui::Button::Ptr button(*gui);
+	button->load("D:/Downloads/TGUI-0.6.7/TGUI-0.6.7/widgets/Black.conf");
+	button->setSize(100, 100);
+	button->setPosition(100, 100);
+	button->setText("lol");
+	button->bindCallback(tgui::Button::LeftMouseClicked);
+	button->setCallbackId(1);
 
 	ball = Ball(sf::Vector2f(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f), sf::Vector2f(0.f, .0f), 10, sf::Color::White, BallMoveSpeed);
 	player1 = Player(sf::Vector2f(40.f, ((SCREEN_HEIGHT / 2) - 200.f)), sf::Vector2f(0.f, 0.f), sf::Vector2f(20.f, 200.f), sf::Color::White, PlayerMoveSpeed); // Uses default up and down keys (w and s);

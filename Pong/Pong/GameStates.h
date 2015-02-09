@@ -7,6 +7,7 @@
 enum GameStates
 {
 	MAINMENU,
+	NEWGAME,
 	INGAME,
 	PAUSED,
 	QUIT
