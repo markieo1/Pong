@@ -44,12 +44,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Github\Pong\Pong\SFML-2.2\include;D:\Github\Pong\Pong\PongEngine;D:\Github\Pong\Pong\TGUI-0.6.7\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\SFML-2.2\include;D:\Github\Pong\Pong\PongEngine;..\TGUI-0.6.7\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Github\Pong\Pong\SFML-2.2\lib;D:\Github\Pong\Pong\TGUI-0.6.7\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\SFML-2.2\lib;..\TGUI-0.6.7\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system-s-d.lib;sfml-window-s-d.lib;sfml-graphics-s-d.lib;opengl32.lib;gdi32.lib;winmm.lib;glew.lib;freetype.lib;jpeg.lib;tgui-s-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -60,14 +60,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Github\Pong\Pong\SFML-2.2\include;D:\Github\Pong\Pong\PongEngine;D:\Github\Pong\Pong\TGUI-0.6.7\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\SFML-2.2\include;..\PongEngine;..\TGUI-0.6.7\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>D:\Github\Pong\Pong\SFML-2.2\lib;D:\Github\Pong\Pong\TGUI-0.6.7\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\SFML-2.2\lib;D..\TGUI-0.6.7\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system-s.lib;sfml-window-s.lib;sfml-graphics-s.lib;opengl32.lib;gdi32.lib;winmm.lib;glew.lib;freetype.lib;jpeg.lib;tgui-s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

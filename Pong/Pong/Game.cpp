@@ -123,6 +123,11 @@ void Game::HandleInput()
 					{
 						GameStateHandler.SetState(GameStates::NEWGAME);
 					}
+
+					if (callback.id == 2)
+					{
+						GameStateHandler.SetState(GameStates::QUIT);
+					}
 				}
 				break;
 			}
@@ -201,10 +206,18 @@ void Game::Initialize()
 	tgui::Button::Ptr button(*gui);
 	button->load("D:/Downloads/TGUI-0.6.7/TGUI-0.6.7/widgets/Black.conf");
 	button->setSize(100, 100);
-	button->setPosition(100, 100);
-	button->setText("lol");
+	button->setPosition(SCREEN_WIDTH / 2 - 100, 100);
+	button->setText("New Game");
 	button->bindCallback(tgui::Button::LeftMouseClicked);
 	button->setCallbackId(1);
+
+	tgui::Button::Ptr button2(*gui);
+	button2->load("D:/Downloads/TGUI-0.6.7/TGUI-0.6.7/widgets/Black.conf");
+	button2->setSize(100, 100);
+	button2->setPosition(SCREEN_WIDTH / 2 - 100, 500);
+	button2->setText("Exit");
+	button2->bindCallback(tgui::Button::LeftMouseClicked);
+	button2->setCallbackId(2);
 
 	ball = Ball(sf::Vector2f(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f), sf::Vector2f(0.f, .0f), 10, sf::Color::White, BallMoveSpeed);
 	player1 = Player(sf::Vector2f(40.f, ((SCREEN_HEIGHT / 2) - 200.f)), sf::Vector2f(0.f, 0.f), sf::Vector2f(20.f, 200.f), sf::Color::White, PlayerMoveSpeed); // Uses default up and down keys (w and s);
