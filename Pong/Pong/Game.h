@@ -4,8 +4,10 @@
 #include "Player.h"
 #include "Ball.h"
 #include "ScoreHandler.h"
-#include "GameStateFactory.h"
-#include <TGUI\TGUI.hpp>
+#include "Button.h"
+#include "MainMenu.h"
+#include "GameStates.h"
+#include <functional>
 
 /// <summary>
 /// A class that handles everything in the game.
@@ -16,8 +18,9 @@ public:
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Game"/> class.
 	/// </summary>
-	Game() : WINDOW_TITLE("My Game created with SFML."), SCREEN_WIDTH(100), SCREEN_HEIGHT(100), START_STATE(GameStates::PAUSED)
-	{};
+	Game() : WINDOW_TITLE("My Game created with SFML."), SCREEN_WIDTH(100), SCREEN_HEIGHT(100), START_STATE(GameStates::MAINMENU)
+	{
+	};
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Game"/> class.
@@ -27,7 +30,8 @@ public:
 	/// <param name="screenHeight">Height of the window to create..</param>
 	/// <param name="startState">The start state.</param>
 	Game(std::string title, int screenWidth, int screenHeight, GameStates startState) : WINDOW_TITLE(title), SCREEN_WIDTH(screenWidth), SCREEN_HEIGHT(screenHeight), START_STATE(startState)
-	{};
+	{
+	};
 
 	/// <summary>
 	/// Finalizes an instance of the <see cref="Game"/> class.
@@ -89,6 +93,8 @@ public:
 	/// The start state.
 	/// </summary>
 	const GameStates START_STATE;
+
+	static GameStates CurrentState;
 private:
 	/// <summary>
 	/// The drawer.
@@ -110,10 +116,7 @@ private:
 	/// </summary>
 	Player player2;
 
-	/// <summary>
-	/// The game state handler.
-	/// </summary>
-	GameStateFactory GameStateHandler;
+	MainMenu mainMenu;
 
 	/// <summary>
 	/// The font to use to draw text.
@@ -124,8 +127,6 @@ private:
 	/// The text to draw.
 	/// </summary>
 	sf::Text text;
-
-	tgui::Gui* gui;
 };
 
 #endif

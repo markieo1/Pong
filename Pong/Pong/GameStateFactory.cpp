@@ -2,7 +2,7 @@
 
 GameStateFactory::GameStateFactory()
 {
-	currentState = INGAME;
+	currentState = GameStates::MAINMENU;
 }
 
 GameStateFactory::GameStateFactory(GameStates startState)
@@ -17,5 +17,5 @@ void GameStateFactory::SetState(GameStates state)
 
 GameStates GameStateFactory::GetCurrentState()
 {
-	return currentState;
+	return this->currentState;
 }

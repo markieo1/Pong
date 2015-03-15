@@ -1,28 +1,36 @@
 #include "Game.h"
+#include <iostream>
+
+GameStates Game::CurrentState = GameStates::MAINMENU;
 
 void Game::Run()
 {
 	Initialize();
 
 	sf::Clock deltaClock;
-	while (drawer.GameWindow->isOpen() && GameStateHandler.GetCurrentState() != GameStates::QUIT)
+	while (drawer.GameWindow->isOpen() && CurrentState != GameStates::QUIT)
 	{
 		float deltaTime = deltaClock.restart().asSeconds();
 
+		if (CurrentState == GameStates::QUIT)
+			break;
 		HandleInput();
-
+		if (CurrentState == GameStates::QUIT)
+			break;
 		Update(deltaTime);
-
+		if (CurrentState == GameStates::QUIT)
+			break;
 		Draw();
 	}
 }
 
 void Game::Update(float deltaTime)
 {
-	switch (GameStateHandler.GetCurrentState())
+	switch (CurrentState)
 	{
 		case GameStates::MAINMENU:
 		{
+			mainMenu.Update();
 			break;
 		}
 
@@ -60,7 +68,7 @@ void Game::Update(float deltaTime)
 				ball.position = sf::Vector2f(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f);
 				ball.velocity = sf::Vector2f(0.f, 0.f);
 				ball.circle.setPosition(ball.position);
-				GameStateHandler.SetState(GameStates::PAUSED);
+				CurrentState = GameStates::PAUSED;
 			}
 
 			text.setString(sf::String(std::to_string(ScoreHandler::player1Score) + " - " + std::to_string(ScoreHandler::player2Score)));
@@ -74,11 +82,11 @@ void Game::Update(float deltaTime)
 void Game::Draw()
 {
 	drawer.GameWindow->clear();
-	switch (GameStateHandler.GetCurrentState())
+	switch (CurrentState)
 	{
 		case GameStates::MAINMENU:
 		{
-			gui->draw();
+			mainMenu.Draw();
 			break;
 		}
 
@@ -103,7 +111,6 @@ void Game::HandleInput()
 	sf::Event event;
 	while (drawer.GameWindow->pollEvent(event))
 	{
-		gui->handleEvent(event);
 		if (event.type == sf::Event::Closed)
 		{
 			drawer.GameWindow->close();
@@ -112,23 +119,11 @@ void Game::HandleInput()
 
 	if (drawer.GameWindow->hasFocus())
 	{
-		switch (GameStateHandler.GetCurrentState())
+		switch (CurrentState)
 		{
 			case GameStates::MAINMENU:
 			{
-				tgui::Callback callback;
-				while (gui->pollCallback(callback))
-				{
-					if (callback.id == 1)
-					{
-						GameStateHandler.SetState(GameStates::NEWGAME);
-					}
-
-					if (callback.id == 2)
-					{
-						GameStateHandler.SetState(GameStates::QUIT);
-					}
-				}
+				mainMenu.HandleInput(event);
 				break;
 			}
 
@@ -136,7 +131,7 @@ void Game::HandleInput()
 			{
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
 				{
-					GameStateHandler.SetState(GameStates::INGAME);
+					CurrentState = GameStates::INGAME;
 
 					if (ball.velocity == sf::Vector2f(0.f, 0.f))
 					{
@@ -152,7 +147,7 @@ void Game::HandleInput()
 			{
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
 				{
-					GameStateHandler.SetState(GameStates::INGAME);
+					CurrentState = GameStates::INGAME;
 
 					if (ball.velocity == sf::Vector2f(0.f, 0.f))
 					{
@@ -164,7 +159,7 @@ void Game::HandleInput()
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 				{
-					GameStateHandler.SetState(GameStates::NEWGAME);
+					CurrentState = GameStates::NEWGAME;
 				}
 				break;
 			}
@@ -174,12 +169,12 @@ void Game::HandleInput()
 			{
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Keyboard::isKeyPressed(sf::Keyboard::P)) // Check if escape or p key is pressed.
 				{
-					GameStateHandler.SetState(GameStates::PAUSED);
+					CurrentState = GameStates::PAUSED;
 				}
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 				{
-					GameStateHandler.SetState(GameStates::NEWGAME);
+					CurrentState = GameStates::NEWGAME;
 				}
 
 				player1.HandleInput();
@@ -192,32 +187,17 @@ void Game::HandleInput()
 
 void Game::Initialize()
 {
-	GameStateHandler = GameStateFactory(START_STATE);
-
+	CurrentState = START_STATE;
 	drawer = PongEngine::Drawer();
 	drawer.Init(WINDOW_TITLE, 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, sf::Style::Close);
 
-	gui = new tgui::Gui(*drawer.GameWindow);
-
 	font.loadFromFile("./Debug/arial.ttf");
 	text.setFont(font);
-	gui->setGlobalFont(font);
-
-	tgui::Button::Ptr button(*gui);
-	button->load("D:/Downloads/TGUI-0.6.7/TGUI-0.6.7/widgets/Black.conf");
-	button->setSize(100, 100);
-	button->setPosition(SCREEN_WIDTH / 2 - 100, 100);
-	button->setText("New Game");
-	button->bindCallback(tgui::Button::LeftMouseClicked);
-	button->setCallbackId(1);
-
-	tgui::Button::Ptr button2(*gui);
-	button2->load("D:/Downloads/TGUI-0.6.7/TGUI-0.6.7/widgets/Black.conf");
-	button2->setSize(100, 100);
-	button2->setPosition(SCREEN_WIDTH / 2 - 100, 500);
-	button2->setText("Exit");
-	button2->bindCallback(tgui::Button::LeftMouseClicked);
-	button2->setCallbackId(2);
+	mainMenu = MainMenu(drawer, &font);
+	/*
+	btn = PongEngine::GUI::Button("New Game", &font, sf::Vector2f(200,100), sf::Vector2f(200,100));
+	using std::placeholders::_1;
+	btn.OnMouseClickEvent = std::bind(&Game::NewGameButtonClick, this, _1);*/
 
 	ball = Ball(sf::Vector2f(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f), sf::Vector2f(0.f, .0f), 10, sf::Color::White, BallMoveSpeed);
 	player1 = Player(sf::Vector2f(40.f, ((SCREEN_HEIGHT / 2) - 200.f)), sf::Vector2f(0.f, 0.f), sf::Vector2f(20.f, 200.f), sf::Color::White, PlayerMoveSpeed); // Uses default up and down keys (w and s);
