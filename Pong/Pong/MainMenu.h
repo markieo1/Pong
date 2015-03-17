@@ -3,7 +3,6 @@
 
 #include "Drawer.h"
 #include "Button.h"
-#include <iostream>
 class MainMenu
 {
 public:
@@ -26,7 +25,7 @@ private:
 	PongEngine::GUI::Button optionsButton;
 	PongEngine::GUI::Button exitGameButton;
 
-	void ShowHoverIndicator(PongEngine::GUI::Button* button, int size, bool ScaleUp);
+	void ShowHoverIndicator(PongEngine::GUI::Button* button, float size, bool ScaleUp);
 
 	void ButtonOnMouseEnter(PongEngine::GUI::Button* button);
 	void ButtonOnMouseLeave(PongEngine::GUI::Button* button);

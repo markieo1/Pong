@@ -30,12 +30,24 @@
     <ClInclude Include="Button.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="TextField.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIRectangle.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Drawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TextField.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIRectangle.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
   </ItemGroup>

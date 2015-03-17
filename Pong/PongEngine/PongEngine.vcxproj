@@ -77,10 +77,14 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Drawer.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GUIRectangle.h" />
+    <ClInclude Include="TextField.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Drawer.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="GUIRectangle.cpp" />
+    <ClCompile Include="TextField.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

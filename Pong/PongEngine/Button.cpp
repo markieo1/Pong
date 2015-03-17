@@ -5,7 +5,7 @@ namespace PongEngine
 {
 	namespace GUI
 	{
-		Button::Button()
+		Button::Button() : GuiRectangle()
 		{
 			IsEnabled = true;
 			rectangle = sf::RectangleShape(sf::Vector2f(100, 100));
@@ -17,7 +17,7 @@ namespace PongEngine
 			text = sf::Text();
 		}
 
-		Button::Button(std::string buttonText, sf::Color textColor, sf::Font* buttonFont, sf::Vector2f position, sf::Vector2f size)
+		Button::Button(std::string buttonText, sf::Color textColor, sf::Font* buttonFont, sf::Vector2f position, sf::Vector2f size) : GuiRectangle(position, size)
 		{
 			IsEnabled = true;
 			rectangle = sf::RectangleShape(size);
@@ -29,7 +29,7 @@ namespace PongEngine
 			text.setColor(textColor);
 		}
 
-		Button::Button(std::string buttonText, sf::Color textColor, sf::Font* buttonFont, sf::Vector2f position, sf::Vector2f size, sf::Color borderColor, float borderSize)
+		Button::Button(std::string buttonText, sf::Color textColor, sf::Font* buttonFont, sf::Vector2f position, sf::Vector2f size, sf::Color fillColor, sf::Color borderColor, float borderSize) : GuiRectangle(position, size, fillColor, borderColor, borderSize)
 		{
 			IsEnabled = true;
 			rectangle = sf::RectangleShape(size);
@@ -46,9 +46,12 @@ namespace PongEngine
 
 		void Button::Update()
 		{
+			float rectangleWidth = rectangle.getSize().x;
+			float rectangleHeight = rectangle.getSize().y;
+
 			float textWidth = text.getLocalBounds().width + *textOffset;
 			float textHeight = font->getLineSpacing(text.getCharacterSize()) / 2 + text.getLocalBounds().height;
-			float fontScaleW = rectangle.getSize().x / textWidth;
+			float fontScaleW = rectangleWidth / textWidth;
 			if (fontScaleW > 1.0f)
 			{
 				//This means the font size is too low.
@@ -57,7 +60,7 @@ namespace PongEngine
 				fontScaleW = 1.0f;
 			}
 
-			float fontScaleH = rectangle.getSize().y / textHeight;
+			float fontScaleH = rectangleHeight / textHeight;
 			if (fontScaleH > 1.0f)
 			{
 				//This means the font size is too low.
@@ -65,7 +68,13 @@ namespace PongEngine
 				//Therefore we let it stay at its normal size.
 				fontScaleH = 1.0f;
 			}
-			sf::FloatRect test = rectangle.getLocalBounds();
+
+			textWidth *= fontScaleW;
+			textHeight *= fontScaleH;
+			
+			float posX = (rectangleWidth / 2.0f) - (textWidth / 2) + rectangle.getPosition().x;
+			float posY = (rectangleHeight / 2.0f) - (textHeight / 2) + rectangle.getPosition().y;
+			text.setPosition(posX, posY);
 			text.setScale(fontScaleW, fontScaleH);
 		}
 
@@ -133,58 +142,6 @@ namespace PongEngine
 			}
 		}
 
-		sf::Vector2f Button::GetPosition()
-		{
-			return rectangle.getPosition();
-		}
-
-		void Button::SetXPosition(float x)
-		{
-			SetPosition(sf::Vector2f(x, GetPosition().y));
-		}
-
-		void Button::SetYPosition(float y)
-		{
-			SetPosition(sf::Vector2f(GetPosition().x, y));
-		}
-
-		void Button::SetPosition(float x, float y)
-		{
-			rectangle.setPosition(x, y);
-			text.setPosition(x, y);
-		}
-
-		void Button::SetPosition(sf::Vector2f position)
-		{
-			rectangle.setPosition(position.x, position.y);
-			text.setPosition(position);
-		}
-
-		sf::Vector2f Button::GetSize()
-		{
-			return rectangle.getSize();
-		}
-
-		void Button::SetWidth(float width)
-		{
-			SetSize(width, GetSize().y);
-		}
-
-		void Button::SetHeight(float height)
-		{
-			SetSize(GetSize().x, height);
-		}
-
-		void Button::SetSize(float width, float height)
-		{
-			rectangle.setSize(sf::Vector2f(width, height));
-		}
-
-		void Button::SetSize(sf::Vector2f size)
-		{
-			rectangle.setSize(size);
-		}
-
 		std::string Button::GetText()
 		{
 			return text.getString().toAnsiString();
@@ -203,36 +160,6 @@ namespace PongEngine
 		void Button::SetTextColor(sf::Color color)
 		{
 			this->text.setColor(color);
-		}
-
-		sf::Color Button::GetBorderColor()
-		{
-			return rectangle.getOutlineColor();
-		}
-
-		void Button::SetBorderColor(sf::Color color)
-		{
-			rectangle.setOutlineColor(color);
-		}
-
-		sf::Color Button::GetBackgroundColor()
-		{
-			return rectangle.getFillColor();
-		}
-
-		void Button::SetBackgroundColor(sf::Color color)
-		{
-			rectangle.setFillColor(color);
-		}
-
-		float Button::GetBorderSize()
-		{
-			return rectangle.getOutlineThickness();
-		}
-
-		void Button::SetBorderSize(float size)
-		{
-			rectangle.setOutlineThickness(size);
 		}
 	}
 }

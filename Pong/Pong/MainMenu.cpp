@@ -7,8 +7,9 @@ MainMenu::MainMenu() : drawer(new PongEngine::Drawer())
 MainMenu::MainMenu(PongEngine::Drawer& drawer, sf::Font* buttonFont) : drawer(&drawer)
 {
 	newGameButton = PongEngine::GUI::Button("New Game", sf::Color::Red, buttonFont, sf::Vector2f(drawer.GameWindow->getSize().x / 2.0f - 150.0f, drawer.GameWindow->getSize().y / 2.0f - 250.0f), sf::Vector2f(300.0f, 100.0f));
-	optionsButton = PongEngine::GUI::Button("Options", sf::Color::Red, buttonFont, sf::Vector2f(drawer.GameWindow->getSize().x / 2.0f - 150.0f, drawer.GameWindow->getSize().y / 2.0f -100.0f), sf::Vector2f(300.0f, 100.0f));
-	exitGameButton = PongEngine::GUI::Button("Exit Game", sf::Color::Red, buttonFont, sf::Vector2f(drawer.GameWindow->getSize().x / 2.0f - 150.0f, drawer.GameWindow->getSize().y / 2.0f +50.0f), sf::Vector2f(300.0f, 100.0f));
+	optionsButton = PongEngine::GUI::Button("Options", sf::Color::Red, buttonFont, sf::Vector2f(drawer.GameWindow->getSize().x / 2.0f - 150.0f, drawer.GameWindow->getSize().y / 2.0f - 100.0f), sf::Vector2f(300.0f, 100.0f));
+	exitGameButton = PongEngine::GUI::Button("Exit Game", sf::Color::Red, buttonFont, sf::Vector2f(drawer.GameWindow->getSize().x / 2.0f - 150.0f, drawer.GameWindow->getSize().y / 2.0f + 50.0f), sf::Vector2f(300.0f, 100.0f));
+
 
 	using std::placeholders::_1;
 	newGameButton.OnMouseClickEvent = std::bind(&MainMenu::NewGameButtonClick, this, _1);
@@ -21,6 +22,7 @@ MainMenu::MainMenu(PongEngine::Drawer& drawer, sf::Font* buttonFont) : drawer(&d
 	newGameButton.OnMouseLeaveEvent = std::bind(&MainMenu::ButtonOnMouseLeave, this, _1);
 	optionsButton.OnMouseLeaveEvent = std::bind(&MainMenu::ButtonOnMouseLeave, this, _1);
 	exitGameButton.OnMouseLeaveEvent = std::bind(&MainMenu::ButtonOnMouseLeave, this, _1);
+	Update();
 }
 
 void MainMenu::Update()
@@ -44,26 +46,26 @@ void MainMenu::Draw()
 	exitGameButton.Draw(drawer);
 }
 
-void MainMenu::ShowHoverIndicator(PongEngine::GUI::Button* button, int size, bool ScaleUp)
+void MainMenu::ShowHoverIndicator(PongEngine::GUI::Button* button, float size, bool ScaleUp)
 {
 	if (ScaleUp)
 	{
-		int xPos = button->GetPosition().x - size / 2;
-		int yPos = button->GetPosition().y - size / 2;
+		float xPos = button->GetPosition().x - size / 2;
+		float yPos = button->GetPosition().y - size / 2;
 
-		int width = button->GetSize().x + size;
-		int height = button->GetSize().y + size;
+		float width = button->GetSize().x + size;
+		float height = button->GetSize().y + size;
 
 		button->SetPosition(xPos, yPos);
 		button->SetSize(width, height);
 	}
 	else
 	{
-		int xPos = button->GetPosition().x + size / 2;
-		int yPos = button->GetPosition().y + size / 2;
+		float xPos = button->GetPosition().x + size / 2;
+		float yPos = button->GetPosition().y + size / 2;
 
-		int width = button->GetSize().x - size;
-		int height = button->GetSize().y - size;
+		float width = button->GetSize().x - size;
+		float height = button->GetSize().y - size;
 
 		button->SetPosition(xPos, yPos);
 		button->SetSize(width, height);
@@ -72,12 +74,12 @@ void MainMenu::ShowHoverIndicator(PongEngine::GUI::Button* button, int size, boo
 
 void MainMenu::ButtonOnMouseEnter(PongEngine::GUI::Button* button)
 {
-	ShowHoverIndicator(button, 10, true);
+	ShowHoverIndicator(button, 10.0, true);
 }
 
 void MainMenu::ButtonOnMouseLeave(PongEngine::GUI::Button* button)
 {
-	ShowHoverIndicator(button, 10, false);
+	ShowHoverIndicator(button, 10.0, false);
 }
 
 void MainMenu::NewGameButtonClick(PongEngine::GUI::Button* button)

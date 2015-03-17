@@ -79,6 +79,7 @@
     <ClCompile Include="GameStateFactory.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="OptionsMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ScoreHandler.cpp" />
   </ItemGroup>
@@ -88,6 +89,7 @@
     <ClInclude Include="GameStateFactory.h" />
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="OptionsMenu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ScoreHandler.h" />
   </ItemGroup>
